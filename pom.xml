@@ -142,6 +142,9 @@
         
     </build>
     <modules>
+        <module>klokee-handler</module>
         <module>klokee-core</module>
+        <module>klokee-handler-local</module>
+        <module>klokee-example</module>
     </modules>
 </project>

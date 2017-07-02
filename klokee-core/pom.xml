@@ -14,7 +14,13 @@
     <name>klokee-core</name>
     <description>A library to receive message easy to your Java EE systems</description>
     
-    
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>klokee-handler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
     <build>
                 
         <!-- Copy all web content files META-INF folder, and push it though a filter to replace maven properties -->

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.github.phillip-kruger</groupId>
+        <artifactId>klokee</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../</relativePath>
+    </parent>
+    
+    <artifactId>klokee-example</artifactId>
+    <packaging>war</packaging>
+    
+    <name>klokee example</name>
+    <description>An example Java EE application that demonstrate Klokee</description>
+    
+    <dependencies>
+        <!-- Klokee Core-->
+        <dependency>
+            <groupId>com.github.phillip-kruger</groupId>
+            <artifactId>klokee-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Klokee handler -->
+        <dependency>
+            <groupId>com.github.phillip-kruger</groupId>
+            <artifactId>klokee-handler-local</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+    </dependencies>
+    
+    <build>
+        <finalName>${project.artifactId}</finalName>
+    </build>
+    
+    <profiles>
+        <!-- Activate using the wildfly property: mvn clean install -Dwildfly -->
+        <profile>
+            <id>wildfly</id>
+            <activation>
+                <property>
+                    <name>wildfly</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>1.2.0.Alpha5</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>        
+            </build>
+        </profile>    
+        
+        <!-- Activate using the tomee property: mvn clean install -Dtomee -->
+        <profile>
+            <id>tomee</id>
+            <activation>
+                <property>
+                    <name>tomee</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <configuration>
+                            <outputDirectory>/opt/apache-tomee-plus-7.0.3/webapps/</outputDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                        
+            </build>
+        </profile>
+        
+        <!-- Activate using the payara property: mvn clean install -Dpayara -->
+        <profile>
+            <id>payara</id>
+            <activation>
+                <property>
+                    <name>payara</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <configuration>
+                            <outputDirectory>/opt/payara41/glassfish/domains/domain1/autodeploy/</outputDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                        
+            </build>
+        </profile>
+        
+        <!-- Activate using the liberty property: mvn clean install -Dliberty -->
+        <profile>
+            <id>liberty</id>
+            <activation>
+                <property>
+                    <name>liberty</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <configuration>
+                            <outputDirectory>/opt/wlp/usr/servers/defaultServer/dropins/</outputDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                        
+            </build>
+        </profile>
+    </profiles>
+</project>
