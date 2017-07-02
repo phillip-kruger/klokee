@@ -4,6 +4,8 @@ import com.github.phillipkruger.klokee.handler.MessageHandler;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import lombok.extern.java.Log;
 
 /**
@@ -16,8 +18,9 @@ public class KlokeeService {
 
     @EJB
     private MessageHandler messageHandler;
-    @EJB
-    private Distributor distributor;
+    
+    @Inject
+    private Event<KlokeeMessage> broadcaster;
     
     @Asynchronous
     public void checkMessage(){
@@ -30,8 +33,9 @@ public class KlokeeService {
                 // TODO: Make XML (or Json ?)
                 // TODO: Transform
                 // Distribute
-                distributor.distributeMessage(content);
+                distributeMessage(content);
                 // TODO: Clean up
+                cleanUp();
             }else{
                 log.severe("No input exist");
             }
@@ -41,4 +45,11 @@ public class KlokeeService {
         
     }
     
+    private void distributeMessage(byte[] content) {
+        broadcaster.fire(new KlokeeMessage(content));
+    }
+    
+    private void cleanUp(){
+        messageHandler.cleanup();
+    }
 }

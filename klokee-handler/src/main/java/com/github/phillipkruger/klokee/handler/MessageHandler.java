@@ -8,4 +8,5 @@ public interface MessageHandler {
 
     public boolean messageExist();
     public byte[] getContent(); // TODO: Change to List<byte[]> to support multiple files
+    public void cleanup();
 }
