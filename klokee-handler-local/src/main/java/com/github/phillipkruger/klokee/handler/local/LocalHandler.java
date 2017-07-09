@@ -4,12 +4,15 @@ import com.github.phillipkruger.klokee.handler.KlokeeProperties;
 import com.github.phillipkruger.klokee.handler.MessageHandler;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.Local;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import lombok.extern.java.Log;
 
 /**
@@ -18,17 +21,14 @@ import lombok.extern.java.Log;
  * TODO: Support regex
  */
 @Log
-@Stateless
-@Local(value = MessageHandler.class)
 public class LocalHandler implements MessageHandler {
-    public static final String NAME = "Local";
-
-    @Inject
-    private KlokeeProperties klokeeProperties;
+    
+    @Inject @KlokeeProperties
+    protected Properties properties;
     
     @Override
     public boolean messageExist() {
-        String uri = klokeeProperties.getProperties().getProperty(URI,null);
+        String uri = properties.getProperty(URI,null);
         if(uri!=null){        
             return Files.exists(Paths.get(uri));
         }
@@ -38,7 +38,7 @@ public class LocalHandler implements MessageHandler {
     @Override
     public byte[] getContent() {
         if(messageExist()){
-            String uri = klokeeProperties.getProperties().getProperty(URI,null);
+            String uri = properties.getProperty(URI,null);
             if(uri!=null){        
                 try {
                     byte[] b = Files.readAllBytes(Paths.get(uri));
@@ -52,30 +52,42 @@ public class LocalHandler implements MessageHandler {
     }
     
     @Override
-    public void cleanup() {
-        if(messageExist()){
-            String uri = klokeeProperties.getProperties().getProperty(URI,null);
-            if(uri!=null){
-                String cleanup = klokeeProperties.getProperties().getProperty(CLEANUP,null);
-                if(cleanup!=null && cleanup.equalsIgnoreCase(DELETE)){
-                    try {
-                        Files.delete(Paths.get(uri));
-                    } catch (IOException ex) {
-                        log.log(Level.SEVERE, "Can not delete [{0}] - {1}", new Object[]{uri, ex.getMessage()});
-                    }
-                }else if(cleanup!=null && cleanup.equalsIgnoreCase(HIDE)){
-                    // TODO: Files.move(path, path1, cos)
-                }
-                
-            }
+    public void delete(@NotNull String uri){
+        try {
+            Files.delete(Paths.get(uri));
+        } catch (IOException ex) {
+            log.log(Level.SEVERE, "Can not delete [{0}] - {1}", new Object[]{uri, ex.getMessage()});
+        }
+    }
+    
+    @Override
+    public void hide(@NotNull String uri){
+        Path sourcePath = Paths.get(uri);
+        String filename = sourcePath.getFileName().toString();
+        Path destinationPath = Paths.get(sourcePath.getParent().toString(),DOT + filename);
+        move(sourcePath,destinationPath);
+    }
+    
+    @Override
+    public void backup(@NotNull String uri){
+        Path sourcePath = Paths.get(uri);
+        String filename = sourcePath.getFileName().toString();
+        SimpleDateFormat sdf = new SimpleDateFormat(BACKUP_DATE_FORMAT);
+        String dateString = sdf.format(new Date());
+        Path destinationPath = Paths.get(sourcePath.getParent().toString(), filename + DOT + dateString);
+        move(sourcePath,destinationPath);
+    }
+    
+    private void move(@NotNull Path sourcePath,@NotNull Path destinationPath){
+        try {
+            Files.move(sourcePath, destinationPath,StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            log.log(Level.SEVERE, "Can not move [{0}] - {1}", new Object[]{sourcePath.toString(), ex.getMessage()});
         }
     }
     
     private static final String URI = "uri";
-    private static final String CLEANUP = "cleanup";
-    private static final String DELETE = "delete";
-    private static final String HIDE = "hide";
-    
-    
+    private static final String DOT = ".";
+    private static final String BACKUP_DATE_FORMAT = "yyyy_MM_dd_HH_mm_ss_SSS";
     
 }

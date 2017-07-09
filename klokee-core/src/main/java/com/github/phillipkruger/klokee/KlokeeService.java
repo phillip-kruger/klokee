@@ -1,8 +1,9 @@
 package com.github.phillipkruger.klokee;
 
+import com.github.phillipkruger.klokee.handler.KlokeeProperties;
 import com.github.phillipkruger.klokee.handler.MessageHandler;
+import java.util.Properties;
 import javax.ejb.Asynchronous;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -16,11 +17,14 @@ import lombok.extern.java.Log;
 @Stateless
 public class KlokeeService {
 
-    @EJB
+    @Inject
     private MessageHandler messageHandler;
     
     @Inject
     private Event<KlokeeMessage> broadcaster;
+    
+    @Inject @KlokeeProperties
+    protected Properties properties;
     
     @Asynchronous
     public void checkMessage(){
@@ -34,8 +38,7 @@ public class KlokeeService {
                 // TODO: Transform
                 // Distribute
                 distributeMessage(content);
-                // TODO: Clean up
-                cleanUp();
+                cleanup();
             }else{
                 log.severe("No input exist");
             }
@@ -49,7 +52,24 @@ public class KlokeeService {
         broadcaster.fire(new KlokeeMessage(content));
     }
     
-    private void cleanUp(){
-        messageHandler.cleanup();
+    private void cleanup() {
+        String uri = properties.getProperty(URI,null);
+        if(uri!=null){
+            String cleanup = properties.getProperty(CLEANUP,null);
+            if(cleanup!=null && cleanup.equalsIgnoreCase(DELETE)){
+                messageHandler.delete(uri);
+            }else if(cleanup!=null && cleanup.equalsIgnoreCase(HIDE)){
+                messageHandler.hide(uri);
+            }else if(cleanup!=null && cleanup.equalsIgnoreCase(BACKUP)){
+                messageHandler.backup(uri); 
+            }
+        }
+        
     }
+    
+    private static final String URI = "uri";
+    private static final String CLEANUP = "cleanup";
+    private static final String DELETE = "delete";
+    private static final String HIDE = "hide";
+    private static final String BACKUP = "backup";
 }

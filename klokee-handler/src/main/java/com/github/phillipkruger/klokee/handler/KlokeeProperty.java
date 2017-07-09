@@ -9,13 +9,15 @@ import static java.lang.annotation.ElementType.FIELD;
 import javax.enterprise.util.Nonbinding;
 
 /**
- * Allow one to inject the properties
+ * Allow one to inject the property value
  * @author Phillip Kruger (klokee@phillip-kruger.com)
  */
 @Qualifier
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
-public @interface KlokeeProperties {
+public @interface KlokeeProperty {
 
     @Nonbinding String value() default "klokee.properties";
+    @Nonbinding String key() default "";
+    
 }

@@ -1,6 +1,5 @@
 package com.github.phillipkruger.klokee;
 
-import com.github.phillipkruger.klokee.handler.KlokeeProperties;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -14,6 +13,7 @@ import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.inject.Inject;
 import lombok.extern.java.Log;
+import com.github.phillipkruger.klokee.handler.KlokeeProperty;
 
 /**
  * This service creates a schedule to poll for file
@@ -24,8 +24,8 @@ import lombok.extern.java.Log;
 @Log
 public class Scheduler {
 
-    @Inject
-    private KlokeeProperties klokeeProperties;
+    @Inject @KlokeeProperty(key = "cronExpression")
+    private String configuredExpression;
     
     @EJB
     private KlokeeService klokeeService;
@@ -34,11 +34,9 @@ public class Scheduler {
     private TimerService timerService;
     
     private final TimerConfig config = new TimerConfig("Klokee Timer", false);
-    private Properties properties;
         
     @PostConstruct
     private void init(){
-        properties = klokeeProperties.getProperties();
         schedulePoll();
     }
     
@@ -48,7 +46,6 @@ public class Scheduler {
     }
     
     private void schedulePoll(){
-        String configuredExpression = getCronExpression();
         if(configuredExpression!=null){
             CronExpression cronExpression = new CronExpression(configuredExpression);
             ScheduleExpression scheduleExpression = new ScheduleExpression();
@@ -60,9 +57,5 @@ public class Scheduler {
 
             Timer timer = timerService.createCalendarTimer(scheduleExpression, config);
         }
-    }
-    
-    private String getCronExpression(){
-        return properties.getProperty("cronExpression",null);
     }
 }
