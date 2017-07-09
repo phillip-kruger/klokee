@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class KlokeeMessage implements Serializable{
     
+    private String handler;
     private byte[] content;
     
 }

@@ -8,19 +8,20 @@
         <relativePath>../</relativePath>
     </parent>
     
-    <artifactId>klokee-core</artifactId>
+    <artifactId>klokee-engine</artifactId>
     <packaging>jar</packaging>
     
-    <name>klokee-core</name>
+    <name>klokee-engine</name>
     <description>A library to receive message easy to your Java EE systems</description>
     
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>klokee-handler</artifactId>
+            <artifactId>klokee-conf</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+    
     <build>
                 
         <!-- Copy all web content files META-INF folder, and push it though a filter to replace maven properties -->

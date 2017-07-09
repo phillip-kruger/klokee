@@ -1,6 +1,5 @@
 package com.github.phillipkruger.klokee;
 
-import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;

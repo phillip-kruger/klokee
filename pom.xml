@@ -142,9 +142,11 @@
         
     </build>
     <modules>
-        <module>klokee-handler</module>
-        <module>klokee-core</module>
+        <module>klokee-conf</module>
+        <module>klokee-engine</module>
         <module>klokee-handler-local</module>
+        <module>klokee-handler-ftp</module>
         <module>klokee-example</module>
+        
     </modules>
 </project>

@@ -1,4 +1,4 @@
-package com.github.phillipkruger.klokee.handler.local;
+package com.github.phillipkruger.klokee.handler.ftp;
 
 import com.github.phillipkruger.klokee.handler.KlokeeProperties;
 import com.github.phillipkruger.klokee.handler.MessageHandler;
@@ -16,13 +16,13 @@ import javax.validation.constraints.NotNull;
 import lombok.extern.java.Log;
 
 /**
- * Handle local files
+ * Handle ftp files
  * @author Phillip Kruger (klokee@phillip-kruger.com)
  * TODO: Support regex
  */
 @Log
-public class LocalHandler implements MessageHandler {
-    private static final String NAME = "local";
+public class FtpHandler implements MessageHandler {
+    private static final String NAME = "ftp";
     
     @Inject @KlokeeProperties
     protected Properties properties;

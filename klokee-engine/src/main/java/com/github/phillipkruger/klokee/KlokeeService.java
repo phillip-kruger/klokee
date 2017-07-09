@@ -37,7 +37,8 @@ public class KlokeeService {
                 // TODO: Make XML (or Json ?)
                 // TODO: Transform
                 // Distribute
-                distributeMessage(content);
+                String handlerName = messageHandler.getName();
+                distributeMessage(handlerName,content);
                 cleanup();
             }else{
                 log.severe("No input exist");
@@ -48,8 +49,8 @@ public class KlokeeService {
         
     }
     
-    private void distributeMessage(byte[] content) {
-        broadcaster.fire(new KlokeeMessage(content));
+    private void distributeMessage(String handlerName, byte[] content) {
+        broadcaster.fire(new KlokeeMessage(handlerName,content));
     }
     
     private void cleanup() {

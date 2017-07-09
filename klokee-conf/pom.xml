@@ -8,9 +8,9 @@
         <relativePath>../</relativePath>
     </parent>
     
-    <artifactId>klokee-handler</artifactId>
+    <artifactId>klokee-conf</artifactId>
     <packaging>jar</packaging>
     
-    <name>klokee-handler</name>
+    <name>klokee-conf</name>
     <description>The Handler API</description>
 </project>

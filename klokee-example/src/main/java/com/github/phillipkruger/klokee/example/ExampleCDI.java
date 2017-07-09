@@ -15,6 +15,6 @@ import lombok.extern.java.Log;
 public class ExampleCDI {
 
     public void receiveMessage(@Observes KlokeeMessage klokeeMessage){
-        log.log(Level.SEVERE, "Example CDI service just received a message [{0}]", new String(klokeeMessage.getContent()));
+        log.log(Level.SEVERE, "Example CDI service just received a message [{0}]", klokeeMessage);
     }
 }

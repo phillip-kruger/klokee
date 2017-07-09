@@ -21,16 +21,21 @@
         <!-- Klokee Core-->
         <dependency>
             <groupId>com.github.phillip-kruger</groupId>
-            <artifactId>klokee-core</artifactId>
+            <artifactId>klokee-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- Klokee handler -->
+        <!-- Klokee local handler -->
         <dependency>
             <groupId>com.github.phillip-kruger</groupId>
             <artifactId>klokee-handler-local</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+        <!-- Klokee ftp handler -->
+        <dependency>
+            <groupId>com.github.phillip-kruger</groupId>
+            <artifactId>klokee-handler-ftp</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     
     <build>

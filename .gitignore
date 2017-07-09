@@ -25,3 +25,7 @@ hs_err_pid*
 /klokee-example/target/
 /klokee-handler/target/
 /klokee-handler-local/target/
+/klokee-client/target/
+/klokee-handler-ftp/target/
+/klokee-conf/target/
+/klokee-engine/target/

@@ -8,9 +8,11 @@ import javax.validation.constraints.NotNull;
  */
 public interface MessageHandler {
 
+    public String getName();
+    
     public boolean messageExist();
     public byte[] getContent(); // TODO: Change to List<byte[]> to support multiple files
-    //public void cleanup();
+    
     public void delete(@NotNull String uri);
     public void hide(@NotNull String uri);
     public void backup(@NotNull String uri);

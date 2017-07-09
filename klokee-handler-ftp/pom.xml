@@ -8,11 +8,11 @@
         <relativePath>../</relativePath>
     </parent>
     
-    <artifactId>klokee-handler-local</artifactId>
+    <artifactId>klokee-handler-ftp</artifactId>
     <packaging>jar</packaging>
     
-    <name>klokee-handler-local</name>
-    <description>A Handler that can check for local files</description>
+    <name>klokee-handler-ftp</name>
+    <description>A Handler that can check for files on a FTP folder</description>
     
     <dependencies>
         <dependency>
@@ -21,4 +21,5 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+    
 </project>
