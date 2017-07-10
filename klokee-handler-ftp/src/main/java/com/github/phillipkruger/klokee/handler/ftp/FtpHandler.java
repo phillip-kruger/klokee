@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import lombok.extern.java.Log;
 
@@ -21,6 +22,7 @@ import lombok.extern.java.Log;
  * TODO: Support regex
  */
 @Log
+@Named("ftp")
 public class FtpHandler implements MessageHandler {
     private static final String NAME = "ftp";
     

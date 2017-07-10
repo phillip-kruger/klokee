@@ -3,9 +3,13 @@ package com.github.phillipkruger.klokee;
 import com.github.phillipkruger.klokee.handler.KlokeeProperties;
 import com.github.phillipkruger.klokee.handler.MessageHandler;
 import java.util.Properties;
+import java.util.logging.Level;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import lombok.extern.java.Log;
 
@@ -17,7 +21,6 @@ import lombok.extern.java.Log;
 @Stateless
 public class KlokeeService {
 
-    @Inject
     private MessageHandler messageHandler;
     
     @Inject
@@ -26,9 +29,20 @@ public class KlokeeService {
     @Inject @KlokeeProperties
     protected Properties properties;
     
+    @PostConstruct
+    public void init(){
+        String handlerName = properties.getProperty(HANDLER,null);
+        if(handlerName!=null){
+            messageHandler = CDI.current().select(MessageHandler.class, new NamedAnnotation(handlerName)).get();
+        }else{
+            log.severe("Message handler not included. Update your pom to include at least one handler and define the handler property");
+        }
+    }
+    
     @Asynchronous
     public void checkMessage(){
         if(messageHandler!=null){
+            String handlerName = messageHandler.getName();
             // Check if there is a file / message
             if(messageHandler.messageExist()){
                 // Get the file contents
@@ -37,16 +51,26 @@ public class KlokeeService {
                 // TODO: Make XML (or Json ?)
                 // TODO: Transform
                 // Distribute
-                String handlerName = messageHandler.getName();
+                
                 distributeMessage(handlerName,content);
                 cleanup();
             }else{
-                log.severe("No input exist");
+                log.log(Level.WARNING, "No input exist for [{0}]", handlerName);
             }
         }else{
-            log.severe("Message handler not included. Update your pom to include at least once handler");
+            log.severe("Message handler not included. Update your pom to include at least one handler and define the handler property");
         }
         
+    }
+    
+    @PreDestroy
+    public void shutdown(){
+        String handlerName = properties.getProperty(HANDLER,null);
+        if(handlerName!=null){
+            CDI.current().select(MessageHandler.class, new NamedAnnotation(handlerName)).destroy(messageHandler);
+        }else{
+            log.severe("Message handler not included. Update your pom to include at least one handler and define the handler property");
+        }
     }
     
     private void distributeMessage(String handlerName, byte[] content) {
@@ -73,4 +97,5 @@ public class KlokeeService {
     private static final String DELETE = "delete";
     private static final String HIDE = "hide";
     private static final String BACKUP = "backup";
+    private static final String HANDLER = "handler";
 }
