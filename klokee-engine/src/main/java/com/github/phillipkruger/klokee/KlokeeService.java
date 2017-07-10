@@ -2,6 +2,9 @@ package com.github.phillipkruger.klokee;
 
 import com.github.phillipkruger.klokee.handler.KlokeeProperties;
 import com.github.phillipkruger.klokee.handler.MessageHandler;
+import com.github.phillipkruger.klokee.handler.Transformer;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -9,6 +12,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import lombok.extern.java.Log;
@@ -33,7 +37,7 @@ public class KlokeeService {
     public void init(){
         String handlerName = properties.getProperty(HANDLER,null);
         if(handlerName!=null){
-            messageHandler = CDI.current().select(MessageHandler.class, new NamedAnnotation(handlerName)).get();
+            messageHandler = getCdiInstance(MessageHandler.class, handlerName).get();
         }else{
             log.severe("Message handler not included. Update your pom to include at least one handler and define the handler property");
         }
@@ -47,12 +51,11 @@ public class KlokeeService {
             if(messageHandler.messageExist()){
                 // Get the file contents
                 byte[] content = messageHandler.getContent();
-                // TODO: Unzip
-                // TODO: Make XML (or Json ?)
-                // TODO: Transform
+                // Push through all transformers
+                byte[] transformentContent = transform(content);
                 // Distribute
-                
-                distributeMessage(handlerName,content);
+                distributeMessage(handlerName,transformentContent);
+                // Clean up
                 cleanup();
             }else{
                 log.log(Level.WARNING, "No input exist for [{0}]", handlerName);
@@ -63,11 +66,40 @@ public class KlokeeService {
         
     }
     
+    private byte[] transform(byte[] content){
+        String transformers = properties.getProperty(TRANSFORMERS, null);
+        if(transformers!=null && !transformers.isEmpty()){
+            List<String> transformerList = Arrays.asList(transformers.split(COMMA));
+            for (String transformerName : transformerList) {
+                transformerName = transformerName.trim();
+                
+                Instance<Transformer> transformerInstance = getCdiInstance(Transformer.class, transformerName);
+                try {
+                    Transformer transformer = transformerInstance.get();
+                    content = transformer.transform(content);
+                    transformerInstance.destroy(transformer);
+                }catch (Throwable t){
+                    // We could not transform...
+                    log.severe("Could not apply transformer [" + transformerName + "] - " + t.getMessage());
+                }
+            }
+            
+            
+            // TODO: Go through all transformers
+            // TODO: Unzip
+            // TODO: Make XML (or Json ?)
+            // TODO: Transform
+        }else{
+            log.finest("No transformers added. Using raw content");    
+        }
+        return content;
+    }
+    
     @PreDestroy
     public void shutdown(){
         String handlerName = properties.getProperty(HANDLER,null);
         if(handlerName!=null){
-            CDI.current().select(MessageHandler.class, new NamedAnnotation(handlerName)).destroy(messageHandler);
+            getCdiInstance(MessageHandler.class, handlerName).destroy(messageHandler);
         }else{
             log.severe("Message handler not included. Update your pom to include at least one handler and define the handler property");
         }
@@ -92,10 +124,16 @@ public class KlokeeService {
         
     }
     
+    private <T> Instance<T> getCdiInstance(Class<T> clazz,String named){
+        return CDI.current().select(clazz, new NamedAnnotation(named));
+    }
+    
     private static final String URI = "uri";
     private static final String CLEANUP = "cleanup";
     private static final String DELETE = "delete";
     private static final String HIDE = "hide";
     private static final String BACKUP = "backup";
     private static final String HANDLER = "handler";
+    private static final String TRANSFORMERS = "transformers";
+    private static final String COMMA = ",";
 }

@@ -36,6 +36,12 @@
             <artifactId>klokee-handler-ftp</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Klokee unzip -->
+        <dependency>
+            <groupId>com.github.phillip-kruger</groupId>
+            <artifactId>klokee-transformer-compress</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     
     <build>

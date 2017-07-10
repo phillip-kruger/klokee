@@ -8,11 +8,16 @@
         <relativePath>../</relativePath>
     </parent>
     
-    <artifactId>klokee-handler-ftp</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>klokee-handler</artifactId>
+    <packaging>pom</packaging>
     
-    <name>klokee-handler-ftp</name>
-    <description>A Handler that can check for files on a FTP folder</description>
+    <name>klokee-handler</name>
+    <description>Parent for all handlers</description>
+    
+    <modules>
+        <module>klokee-handler-ftp</module>
+        <module>klokee-handler-local</module>
+    </modules>
     
     <dependencies>
         <dependency>

@@ -29,3 +29,9 @@ hs_err_pid*
 /klokee-handler-ftp/target/
 /klokee-conf/target/
 /klokee-engine/target/
+/klokee-handler-ftp-bak/target/
+/klokee-handler-local-bak/target/
+/klokee-handler/klokee-handler-local/target/
+/klokee-handler/klokee-handler-ftp/target/
+/klokee-transformer/target/
+/klokee-transformer/klokee-transformer-compress/target/
