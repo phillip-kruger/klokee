@@ -18,9 +18,9 @@ import lombok.extern.java.Log;
  * TODO: support multiple entries in zip 
  */
 @Log
-@Named("compress")
-public class CompressTransformer implements Transformer {
-    private static final String NAME = "compress";
+@Named("unzip")
+public class UnzipTransformer implements Transformer {
+    private static final String NAME = "unzip";
     
     @Inject @KlokeeProperties
     protected Properties properties;

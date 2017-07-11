@@ -39,7 +39,7 @@
         <!-- Klokee unzip -->
         <dependency>
             <groupId>com.github.phillip-kruger</groupId>
-            <artifactId>klokee-transformer-compress</artifactId>
+            <artifactId>klokee-transformer-unzip</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

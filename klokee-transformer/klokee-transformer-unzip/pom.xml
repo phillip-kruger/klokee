@@ -8,9 +8,9 @@
         <relativePath>../</relativePath>
     </parent>
     
-    <artifactId>klokee-transformer-compress</artifactId>
+    <artifactId>klokee-transformer-unzip</artifactId>
     <packaging>jar</packaging>
     
-    <name>klokee-transformer-compress</name>
+    <name>klokee-transformer-unzip</name>
     <description>A transformer that can deal with compressed files</description>
 </project>

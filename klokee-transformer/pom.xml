@@ -14,7 +14,7 @@
     <name>klokee-transformer</name>
     <description>Parent for all transformenrs</description>
     <modules>
-        <module>klokee-transformer-compress</module>
+        <module>klokee-transformer-unzip</module>
     </modules>
     <dependencies>
         <dependency>

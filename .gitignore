@@ -35,3 +35,4 @@ hs_err_pid*
 /klokee-handler/klokee-handler-ftp/target/
 /klokee-transformer/target/
 /klokee-transformer/klokee-transformer-compress/target/
+/klokee-transformer/klokee-transformer-unzip/target/

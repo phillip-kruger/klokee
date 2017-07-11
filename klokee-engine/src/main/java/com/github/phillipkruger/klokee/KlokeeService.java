@@ -20,6 +20,7 @@ import lombok.extern.java.Log;
 /**
  * The Klokee service. This actually do the work
  * @author Phillip Kruger (klokee@phillip-kruger.com)
+ * TODO: Regex and multiple files
  */
 @Log
 @Stateless
@@ -86,9 +87,10 @@ public class KlokeeService {
             
             
             // TODO: Go through all transformers
-            // TODO: Unzip
+            
             // TODO: Make XML (or Json ?)
             // TODO: Transform
+            // TODO: Merge
         }else{
             log.finest("No transformers added. Using raw content");    
         }
