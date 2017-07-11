@@ -15,6 +15,6 @@ import lombok.extern.java.Log;
 public class ExampleEJB {
 
     public void receiveMessage(@Observes KlokeeMessage klokeeMessage){
-        log.log(Level.SEVERE, "Example EJB service just received a message [{0}]", klokeeMessage);
+        log.log(Level.SEVERE, "Example EBJ service just received a message {0} - {1}", new Object[]{klokeeMessage.getHandler(), new String(klokeeMessage.getContent())});
     }
 }
