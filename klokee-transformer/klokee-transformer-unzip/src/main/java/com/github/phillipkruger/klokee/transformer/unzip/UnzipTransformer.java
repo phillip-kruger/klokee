@@ -1,4 +1,4 @@
-package com.github.phillipkruger.klokee.transformer.compress;
+package com.github.phillipkruger.klokee.transformer.unzip;
 
 import com.github.phillipkruger.klokee.handler.KlokeeProperties;
 import com.github.phillipkruger.klokee.handler.Transformer;

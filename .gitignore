@@ -36,3 +36,4 @@ hs_err_pid*
 /klokee-transformer/target/
 /klokee-transformer/klokee-transformer-compress/target/
 /klokee-transformer/klokee-transformer-unzip/target/
+/klokee-transformer/klokee-transformer-xslt/target/

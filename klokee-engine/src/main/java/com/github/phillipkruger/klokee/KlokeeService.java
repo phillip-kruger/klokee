@@ -81,7 +81,7 @@ public class KlokeeService {
                     transformerInstance.destroy(transformer);
                 }catch (Throwable t){
                     // We could not transform...
-                    log.severe("Could not apply transformer [" + transformerName + "] - " + t.getMessage());
+                    log.log(Level.SEVERE,"Could not apply transformer [" + transformerName + "]", t);
                 }
             }
             

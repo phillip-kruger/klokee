@@ -15,6 +15,7 @@
     <description>Parent for all transformenrs</description>
     <modules>
         <module>klokee-transformer-unzip</module>
+        <module>klokee-transformer-xslt</module>
     </modules>
     <dependencies>
         <dependency>
