@@ -16,6 +16,7 @@
     <modules>
         <module>klokee-transformer-unzip</module>
         <module>klokee-transformer-xslt</module>
+        <module>klokee-transformer-js</module>
     </modules>
     <dependencies>
         <dependency>
