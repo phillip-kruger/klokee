@@ -38,3 +38,4 @@ hs_err_pid*
 /klokee-transformer/klokee-transformer-unzip/target/
 /klokee-transformer/klokee-transformer-xslt/target/
 /klokee-transformer/klokee-transformer-js/target/
+/klokee-transformer/klokee-transformer-csv/target/
